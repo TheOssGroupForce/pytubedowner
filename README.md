@@ -3,13 +3,16 @@ pytubedowner
 
 A GUI interface for Pafy
 
-Requirements
-1.Pyside
-2.pafy
+Requirements:
 
-Tools
-1.qt desgner
-2.pycharm
+*Pyside
+*pafy
+
+Tools:
+
+*qt desgner
+*pycharm
 
 Converting .ui to python:
+
 pyside-uic design.ui > program.py
