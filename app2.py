@@ -19,10 +19,9 @@ class DownloadWorker(QThread):
 
     #You can do any extra things in this init you need, but for this example
     #nothing else needs to be done expect call the super's init
-    def __init__(self, url, download_dir, file_name):
+    def __init__(self, url, file_name):
         QThread.__init__(self)
         self.url = url
-        self.download_dir = download_dir
         self.file_name = file_name
 
     #A QThread is run by calling it's start() function, which calls this run()
@@ -34,7 +33,7 @@ class DownloadWorker(QThread):
         file_size = int(meta.getheaders('Content-Length')[0])
         #print file_size
 
-        f = open(os.path.join(self.download_dir, self.file_name), 'wb')
+        f = open(self.file_name, 'wb')
 
         downloaded_bytes = 0
         block_size = 1024*8
@@ -93,11 +92,16 @@ class MainWin(QMainWindow, Ui_MainWindow):
 
     def download_file(self):
         media = self.streams[self.comboBox.currentIndex()]
-        file_name = self.video.title.replace(" ", "_")[:20]+media.resolution+"."+media.extension
-        self.progressBar.setRange(0, 100)
-        self.downloader = DownloadWorker(media.url, self.dw_directory, file_name)
-        self.downloader.updateProgress.connect(self.set_progress)
-        self.downloader.start()
+        #file_name = self.video.title.replace(" ", "_")[:20]+media.resolution+"."+media.extension
+        valid_filename = "".join(x for x in self.video.title if x.isalnum())
+        file_name = QFileDialog.getSaveFileName(self, "Save File", valid_filename+"."+media.extension,
+                                                "(*."+media.extension+")")
+        print(file_name)
+        if file_name[0]:
+            self.progressBar.setRange(0, 100)
+            self.downloader = DownloadWorker(media.url, file_name[0])
+            self.downloader.updateProgress.connect(self.set_progress)
+            self.downloader.start()
 
     def populate_gui(self):
         video = None
