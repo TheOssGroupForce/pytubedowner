@@ -1,11 +1,12 @@
 __author__ = 'hemanth'
 from PySide.QtCore import *
 from PySide.QtGui import *
-from gui_a import Ui_MainWindow
+from new_gui import Ui_MainWindow
 import sys
 import pafy
 import urllib2
 import os
+import pickle
 
 
 class DownloadWorker(QThread):
@@ -19,9 +20,10 @@ class DownloadWorker(QThread):
 
     #You can do any extra things in this init you need, but for this example
     #nothing else needs to be done expect call the super's init
-    def __init__(self, url, file_name):
+    def __init__(self, url, download_dir, file_name):
         QThread.__init__(self)
         self.url = url
+        self.download_dir = download_dir
         self.file_name = file_name
 
     #A QThread is run by calling it's start() function, which calls this run()
@@ -33,7 +35,7 @@ class DownloadWorker(QThread):
         file_size = int(meta.getheaders('Content-Length')[0])
         #print file_size
 
-        f = open(self.file_name, 'wb')
+        f = open(os.path.join(self.download_dir, self.file_name), 'wb')
 
         downloaded_bytes = 0
         block_size = 1024*8
@@ -55,10 +57,26 @@ class MainWin(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.connect(self.pushButton, SIGNAL("clicked()"), self.download_file)
         self.connect(self.get_button, SIGNAL("clicked()"), self.get_video_details)
-        self.dw_directory = "./"
+        self.connect(self.dir_button, SIGNAL("clicked()"), self.set_download_folder)
+
+        #Disable the download directory lineEdit. Only use button to select folder
+        self.dir_edit.setEnabled(False)
+        
+        # Try to load user options. If it fails, use working directory
+        try:
+            self.options = pickle.load(open("user.p","rb"))
+            self.dw_directory = self.options["download_dir"]
+        except Exception, e:
+            self.dw_directory = os.getcwd()
+        # And set the download directory LineEdit to the obtained value
+        self.dir_edit.setText(self.dw_directory)
+
         self.video = None
         self.downloader = None
         self.streams = None
+
+        # Option to set a default download directory
+        self.options = {"download_dir":""}
 
     def set_progress(self, progress, style="update"):
         if style == "indeterminate":
@@ -70,6 +88,15 @@ class MainWin(QMainWindow, Ui_MainWindow):
         else:
             #Normal progress bar with updated value
             self.progressBar.setValue(progress)
+
+    # Set download folder of user's choice
+    def set_download_folder(self):
+        dir_name = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        self.dw_directory = dir_name
+        self.dir_edit.setText(self.dw_directory)
+        self.options["download_dir"] = self.dw_directory
+        pickle.dump( self.options, open( "user.p", "wb" ) )
+
 
     def get_video_details(self):
         try:
@@ -92,16 +119,29 @@ class MainWin(QMainWindow, Ui_MainWindow):
 
     def download_file(self):
         media = self.streams[self.comboBox.currentIndex()]
+<<<<<<< HEAD
+<<<<<<< HEAD
         #file_name = self.video.title.replace(" ", "_")[:20]+media.resolution+"."+media.extension
         valid_filename = "".join(x for x in self.video.title if x.isalnum())
-        file_name = QFileDialog.getSaveFileName(self, "Save File", valid_filename+"."+media.extension,
+        file_name = QFileDialog.getSaveFileName(self, "Save File",self.dw_directory+os.sep+valid_filename+"."+media.extension,
                                                 "(*."+media.extension+")")
-        print(file_name)
         if file_name[0]:
             self.progressBar.setRange(0, 100)
             self.downloader = DownloadWorker(media.url, file_name[0])
             self.downloader.updateProgress.connect(self.set_progress)
             self.downloader.start()
+=======
+=======
+>>>>>>> parent of 5dd2900... Added a file safe dialog
+        file_name = self.video.title.replace(" ", "_")[:20]+media.resolution+"."+media.extension
+        self.progressBar.setRange(0, 100)
+        self.downloader = DownloadWorker(media.url, self.dw_directory, file_name)
+        self.downloader.updateProgress.connect(self.set_progress)
+        self.downloader.start()
+<<<<<<< HEAD
+>>>>>>> parent of 5dd2900... Added a file safe dialog
+=======
+>>>>>>> parent of 5dd2900... Added a file safe dialog
 
     def populate_gui(self):
         video = None
