@@ -123,17 +123,14 @@ class MainWin(QMainWindow, Ui_MainWindow):
         valid_filename = "".join(x for x in self.video.title if x.isalnum())
         file_name = QFileDialog.getSaveFileName(self, "Save File",self.dw_directory+os.sep+valid_filename+"."+media.extension,
                                                 "(*."+media.extension+")")
-        if file_name[0]:
+        if not file_name[0] :
+            pass
+        else:
+            file_name = file_name[0]
             self.progressBar.setRange(0, 100)
-            self.downloader = DownloadWorker(media.url, file_name[0])
+            self.downloader = DownloadWorker(media.url, self.dw_directory, file_name)
             self.downloader.updateProgress.connect(self.set_progress)
             self.downloader.start()
-
-        file_name = self.video.title.replace(" ", "_")[:20]+media.resolution+"."+media.extension
-        self.progressBar.setRange(0, 100)
-        self.downloader = DownloadWorker(media.url, self.dw_directory, file_name)
-        self.downloader.updateProgress.connect(self.set_progress)
-        self.downloader.start()
 
     def populate_gui(self):
         video = None
