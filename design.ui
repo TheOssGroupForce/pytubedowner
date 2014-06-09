@@ -32,7 +32,7 @@
      <rect>
       <x>30</x>
       <y>80</y>
-      <width>201</width>
+      <width>441</width>
       <height>191</height>
      </rect>
     </property>
@@ -138,16 +138,6 @@
     </property>
     <property name="text">
      <string>Get</string>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="video_details">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>80</y>
-      <width>221</width>
-      <height>191</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">

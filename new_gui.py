@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'design.ui'
 #
-# Created: Mon Jun  9 11:24:41 2014
+# Created: Mon Jun  9 15:11:42 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -19,7 +19,7 @@ class Ui_MainWindow(object):
         self.comboBox.setGeometry(QtCore.QRect(100, 360, 211, 25))
         self.comboBox.setObjectName("comboBox")
         self.graphicsView = QtGui.QGraphicsView(self.centralwidget)
-        self.graphicsView.setGeometry(QtCore.QRect(30, 80, 201, 191))
+        self.graphicsView.setGeometry(QtCore.QRect(30, 80, 441, 191))
         self.graphicsView.setObjectName("graphicsView")
         self.pushButton = QtGui.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(330, 360, 141, 27))
@@ -46,9 +46,6 @@ class Ui_MainWindow(object):
         self.get_button = QtGui.QPushButton(self.centralwidget)
         self.get_button.setGeometry(QtCore.QRect(400, 30, 71, 27))
         self.get_button.setObjectName("get_button")
-        self.video_details = QtGui.QTextEdit(self.centralwidget)
-        self.video_details.setGeometry(QtCore.QRect(250, 80, 221, 191))
-        self.video_details.setObjectName("video_details")
         self.label_4 = QtGui.QLabel(self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(30, 420, 66, 17))
         self.label_4.setObjectName("label_4")
