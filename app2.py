@@ -119,8 +119,6 @@ class MainWin(QMainWindow, Ui_MainWindow):
 
     def download_file(self):
         media = self.streams[self.comboBox.currentIndex()]
-<<<<<<< HEAD
-<<<<<<< HEAD
         #file_name = self.video.title.replace(" ", "_")[:20]+media.resolution+"."+media.extension
         valid_filename = "".join(x for x in self.video.title if x.isalnum())
         file_name = QFileDialog.getSaveFileName(self, "Save File",self.dw_directory+os.sep+valid_filename+"."+media.extension,
@@ -130,18 +128,12 @@ class MainWin(QMainWindow, Ui_MainWindow):
             self.downloader = DownloadWorker(media.url, file_name[0])
             self.downloader.updateProgress.connect(self.set_progress)
             self.downloader.start()
-=======
-=======
->>>>>>> parent of 5dd2900... Added a file safe dialog
+
         file_name = self.video.title.replace(" ", "_")[:20]+media.resolution+"."+media.extension
         self.progressBar.setRange(0, 100)
         self.downloader = DownloadWorker(media.url, self.dw_directory, file_name)
         self.downloader.updateProgress.connect(self.set_progress)
         self.downloader.start()
-<<<<<<< HEAD
->>>>>>> parent of 5dd2900... Added a file safe dialog
-=======
->>>>>>> parent of 5dd2900... Added a file safe dialog
 
     def populate_gui(self):
         video = None
